@@ -11,10 +11,16 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'PagesController@home');
+
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
+	Route::get('/', 'Admin\AdminPagesController@index');
+	Route::get('/parent', 'Admin\UserAdminController@parent');
+	Route::get('/child', 'Admin\UserAdminController@child');
+	Route::resource('/users', 'Admin\UserAdminController');
+	Route::resource('/families', 'Admin\FamilyAdminController');
+	Route::resource('/chats', 'Admin\ChatAdminController');
+	Route::resource('/events', 'Admin\EAdminController');
+});
